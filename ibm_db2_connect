@@ -22,15 +22,13 @@ namespace db2_conn_wf
         {
             String db2ConnectionString = @"SERVER=localhost:50000;Database=SAMPLE;Uid=db2admin;Pwd=Secret;";
 
-            DB2Connection odbcConnection = new DB2Connection(db2ConnectionString);
+            DB2Connection connection = new DB2Connection(db2ConnectionString);
 
-
-
-            odbcConnection.Open();
+            connection.Open();
 
             string commandText = "select * from employee";
 
-            using (DB2Command command = new DB2Command(commandText, odbcConnection))
+            using (DB2Command command = new DB2Command(commandText, connection))
             {
                 command.CommandType = System.Data.CommandType.Text;
                 using (DB2DataReader reader = command.ExecuteReader())
