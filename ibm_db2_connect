@@ -1,0 +1,51 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using IBM.Data.DB2;
+
+namespace db2_conn_wf
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            String db2ConnectionString = @"SERVER=localhost:50000;Database=SAMPLE;Uid=db2admin;Pwd=Secret;";
+
+            DB2Connection odbcConnection = new DB2Connection(db2ConnectionString);
+
+
+
+            odbcConnection.Open();
+
+            string commandText = "select * from employee";
+
+            using (DB2Command command = new DB2Command(commandText, odbcConnection))
+            {
+                command.CommandType = System.Data.CommandType.Text;
+                using (DB2DataReader reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            info.AppendText(reader.GetString(0) + " " + reader.GetString(1) + " " + reader.GetString(2) + " " + reader.GetString(3) + " " + reader.GetString(4) + " " + reader.GetString(5) + "\r");
+                        }
+                    }
+                }
+            }
+
+
+        }
+    }
+}
